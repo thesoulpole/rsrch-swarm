@@ -17,14 +17,16 @@ echo ""
 echo "2. Testing Brave MCP server startup..."
 echo ""
 
-timeout 5s npx -y @brave/brave-search-mcp-server > /tmp/mcp-test.log 2>&1 &
+# Start MCP server in background
+npx -y @brave/brave-search-mcp-server > /tmp/mcp-test.log 2>&1 &
 MCP_PID=$!
 
-sleep 2
+sleep 3
 
-if ps -p $MCP_PID > /dev/null; then
+if ps -p $MCP_PID > /dev/null 2>&1; then
   echo "✅ Brave MCP server started (PID: $MCP_PID)"
   kill $MCP_PID 2>/dev/null
+  wait $MCP_PID 2>/dev/null
 else
   echo "❌ Brave MCP server failed to start"
   echo "Error log:"
